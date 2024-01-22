@@ -1,0 +1,98 @@
+<html>
+<head>
+  <style>
+    /* CSS code to style the web page */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #F0F0F0;
+    }
+
+    h1 {
+      font-size: 36px;
+      color: #333333;
+    }
+
+    img {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      margin: 20px;
+    }
+
+    p {
+      font-size: 24px;
+      color: #666666;
+    }
+
+    span {
+      font-weight: bold;
+      color: #FF0000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pug of the Day</h1>
+  <!-- HTML code to display the image and the timer -->
+  <img id="pug-image" src="" alt="Pug image">
+  <p>Next pug image in <span id="timer">24:00:00</span></p>
+  <script>
+    // JavaScript code to fetch the image and update the timer
+    // Declare some variables
+    var pugImage = document.getElementById("pug-image"); // The image element
+    var timer = document.getElementById("timer"); // The timer element
+    var secondsLeft = 24 * 60 * 60; // The number of seconds left until the next image
+    var interval; // The variable to store the interval function
+
+    // Define a function to fetch a random pug image from an API
+    function fetchPugImage() {
+      // Use the fetch method to get the image URL from the API
+      fetch("https://dog.ceo/api/breed/pug/images/random")
+        .then(function(response) {
+          // Convert the response to JSON format
+          return response.json();
+        })
+        .then(function(data) {
+          // Update the image source attribute with the image URL
+          pugImage.src = data.message;
+        })
+        .catch(function(error) {
+          // Handle any errors
+          console.error(error);
+        });
+    }
+
+    // Define a function to format the seconds left into HH:MM:SS format
+    function formatTime(seconds) {
+      // Calculate the hours, minutes, and seconds
+      var hours = Math.floor(seconds / 3600);
+      var minutes = Math.floor((seconds % 3600) / 60);
+      var seconds = seconds % 60;
+      // Add leading zeros if needed
+      if (hours < 10) hours = "0" + hours;
+      if (minutes < 10) minutes = "0" + minutes;
+      if (seconds < 10) seconds = "0" + seconds;
+      // Return the formatted time
+      return hours + ":" + minutes + ":" + seconds;
+    }
+
+    // Define a function to update the timer
+    function updateTimer() {
+      // Decrease the seconds left by one
+      secondsLeft--;
+      // Update the timer element with the formatted time
+      timer.textContent = formatTime(secondsLeft);
+      // If the seconds left is zero, reset the timer and fetch a new image
+      if (secondsLeft === 0) {
+        secondsLeft = 24 * 60 * 60;
+        fetchPugImage();
+      }
+    }
+
+    // Call the fetchPugImage function when the page loads
+    fetchPugImage();
+    // Call the updateTimer function every second and store it in the interval variable
+    interval = setInterval(updateTimer, 1000);
+  </script>
+</body>
+</html>
